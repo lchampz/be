@@ -10,4 +10,8 @@ class ProdutoController extends Controller
     public function index() {
         return Produto::with(["Imagens", "Estoque", "Categoria"])->get();
     }
+
+    public function show(Produto $produto) {
+        return $produto::with(["Imagens", "Estoque", "Categoria"])->get();
+    }
 }

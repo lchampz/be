@@ -20,5 +20,8 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::get("/products", [ProdutoController::class, "index"]);
-Route::get("/categories", [CategoriaController::class, "index"]);
+Route::get("/produtos", [ProdutoController::class, "index"]);
+Route::get("/produto/{produto}", [ProdutoController::class, "show"]);
+
+Route::get("/categorias/{categoria}", [CategoriaController::class, "index"]);
+Route::get("/categoria/{categoria}", action: [CategoriaController::class, "show"]);
