@@ -20,8 +20,10 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+Route::get("/produtos/ativo", [ProdutoController::class, "active"]);
+Route::get("/produtos/ativo/{produto}", [ProdutoController::class,"activeFromId"]);
 Route::get("/produtos", [ProdutoController::class, "index"]);
-Route::get("/produto/{produto}", [ProdutoController::class, "show"]);
+Route::get("/produtos/{produto}", [ProdutoController::class, "show"]);
 
 Route::get("/categorias/{categoria}", [CategoriaController::class, "index"]);
-Route::get("/categoria/{categoria}", action: [CategoriaController::class, "show"]);
+Route::get("/categorias/{categoria}", action: [CategoriaController::class, "show"]);
