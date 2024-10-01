@@ -11,7 +11,7 @@ class ProdutoController extends Controller
         return Produto::with(["Imagens", "Estoque", "Categoria"])->get();
     }
 
-    public function show(Produto $produto) {
-        return $produto::with(["Imagens", "Estoque", "Categoria"])->get();
+    public function show($produto) {
+        return Produto::with(["Imagens", "Estoque", "Categoria"])->findOrFail($produto);
     }
 }
