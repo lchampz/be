@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UsuarioController extends Controller
 {
@@ -42,5 +43,10 @@ class UsuarioController extends Controller
                 'error' => true
             ], 400);
         }
+    }
+
+    public function info(Request $request) {
+        $user = JWTAuth::parseToken()->authenticate();
+        return response()->json(["user" => $user]);
     }
 }

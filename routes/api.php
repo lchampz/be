@@ -23,4 +23,6 @@ Route::middleware(["user"])->group(function () {
     // Categorias
     Route::get("/categorias/{categoria}", [CategoriaController::class, "index"]);
     Route::get("/categorias/{categoria}", [CategoriaController::class, "show"]);
+
+    Route::get("/usuario", [UsuarioController::class, "info"]);
 });
