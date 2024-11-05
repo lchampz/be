@@ -49,4 +49,19 @@ class UsuarioController extends Controller
         $user = JWTAuth::parseToken()->authenticate();
         return response()->json(["user" => $user]);
     }
+
+    function update(Request $request){
+        if(JWTAuth::parseToken()->authenticate()->USUARIO_ID != $request->id){
+            return response()->json(['data' => 'Usuário não autorizado', 'error' => true], 401);
+        }
+
+        Usuario::where('USUARIO_ID', '=',$request->id)->update([
+            'USUARIO_NOME' => $request->name,
+            'USUARIO_EMAIL' => $request->email,
+            'USUARIO_CPF' => $request->cpf,
+            'USUARIO_SENHA' => $request->pass,
+        ]);
+
+        return response()->json(['data' => 'Usuário atualizado com sucesso', 'error' => false], 200);
+    }
 }

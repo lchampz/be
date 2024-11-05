@@ -25,4 +25,5 @@ Route::middleware(["user"])->group(function () {
     Route::get("/categorias/{categoria}", [CategoriaController::class, "show"]);
 
     Route::get("/usuario", [UsuarioController::class, "info"]);
+    Route::post("/usuario", [UsuarioController::class, "update"]);
 });
