@@ -45,7 +45,7 @@ class UsuarioController extends Controller
         }
     }
 
-    public function info(Request $request) {
+    public function info() {
         $user = JWTAuth::parseToken()->authenticate();
         return response()->json(["user" => $user]);
     }
