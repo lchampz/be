@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\EnderecoController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
@@ -30,4 +31,6 @@ Route::middleware(["user"])->group(function () {
     Route::get("/endereco", [EnderecoController::class, "show"]);
 
     Route::get("/pedidos", [UsuarioController::class, "orders"]);
+
+    Route::post("/pagamento", [PaymentController::class, "payment"]);
 });
