@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ItemPedido;
+use App\Models\Pedido;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -50,6 +52,12 @@ class UsuarioController extends Controller
         return response()->json(["user" => $user]);
     }
 
+    public function getUserInfo() {
+        $user = JWTAuth::parseToken()->authenticate();
+        if(!$user) return null;
+        return $user;
+    }
+
     function update(Request $request){
         if(JWTAuth::parseToken()->authenticate()->USUARIO_ID != $request->id){
             return response()->json(['data' => 'Usuário não autorizado', 'error' => true], 401);
@@ -63,5 +71,27 @@ class UsuarioController extends Controller
         ]);
 
         return response()->json(['data' => 'Usuário atualizado com sucesso', 'error' => false], 200);
+    }
+
+    function orders() {
+        $user = $this->getUserInfo();
+
+        if(!$user) return response()->json(['data' => 'Usuário não encontrado', 'error' => true], 401);
+        $userId = $user->USUARIO_ID;
+
+        $orders = Pedido::with("Endereco", "Status")->where("USUARIO_ID", "=", $userId)->get();
+        $itens = ItemPedido::with("Produto")->get();
+
+        $data = [];
+
+        foreach($orders as $order) {
+            $data[] = [
+                'order' => $order,
+                'items' => array_values($itens->where('PEDIDO_ID', '=', $order->PEDIDO_ID)->toArray())
+            ];
+            
+        }
+
+        return response()->json(['data' => $data, 'error' => false], 200);
     }
 }

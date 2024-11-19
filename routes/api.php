@@ -28,4 +28,6 @@ Route::middleware(["user"])->group(function () {
     Route::post("/usuario", [UsuarioController::class, "update"]);
 
     Route::get("/endereco", [EnderecoController::class, "show"]);
+
+    Route::get("/pedidos", [UsuarioController::class, "orders"]);
 });
