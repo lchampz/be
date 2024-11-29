@@ -22,54 +22,64 @@ class EnderecoController extends Controller {
 
     public function store(Request $request)
     {
-
-        if(JWTAuth::parseToken()->authenticate()->USUARIO_ID != $request->usuario_id){
-            return response()->json(['message' => 'Usuário não autorizado'], 401);
-        }
+        $usuarioController = new UsuarioController();
+        $user = $usuarioController->getUserInfo();
 
         $endereco = new Endereco([
-            'USUARIO_ID' => $request->user,
-            'ENDERECO_NOME' => $request->nome,
+            'USUARIO_ID' => $user->USUARIO_ID,
+            'ENDERECO_NOME' => $request->name,
             'ENDERECO_CEP' => $request->cep,
-            'ENDERECO_CIDADE' => $request->cidade,
-            'ENDERECO_ESTADO' => $request->estado,
-            'ENDERECO_NUMERO' => $request->numero,
-            'ENDERECO_LOGRADOURO' => $request->logradouro,
-            'ENDERECO_COMPLEMENTO' => $request->complemento
+            'ENDERECO_CIDADE' => $request->city,
+            'ENDERECO_ESTADO' => $request->state,
+            'ENDERECO_NUMERO' => $request->number,
+            'ENDERECO_LOGRADOURO' => $request->address,
+            'ENDERECO_COMPLEMENTO' => $request->complement
         ]);
 
-        $endereco->save();
-
-        return response()->json(['message' => 'Endereço cadastrado com sucesso'], 201);
+        if ($endereco->save()) {
+            return response()->json([
+                'data' => 'Endereço cadastrado com sucesso!',
+                'error' => false
+            ], 201);
+        } else {
+            return response()->json([
+                'data' => 'Erro ao criar usuário.',
+                'error' => true
+            ], 400);
+        }
     }
 
-    function update(Request $request, Endereco $endereco){
-        if(JWTAuth::parseToken()->authenticate()->USUARIO_ID != $endereco->USUARIO_ID){
-            return response()->json(['message' => 'Usuário não autorizado'], 401);
+    function update(Request $request){
+        if(JWTAuth::parseToken()->authenticate()->USUARIO_ID != $request->userId){
+            return response()->json(['data' => 'Usuário não autorizado', 'error' => true], 401);
         }
 
-        $endereco->update([
-            'ENDERECO_NOME' => $request->nome,
+        Endereco::where('ENDERECO_ID', '=',$request->id)->update([
+            'ENDERECO_NOME' => $request->name,
             'ENDERECO_CEP' => $request->cep,
-            'ENDERECO_CIDADE' => $request->cidade,
-            'ENDERECO_ESTADO' => $request->estado,
-            'ENDERECO_NUMERO' => $request->numero,
-            'ENDERECO_LOGRADOURO' => $request->logradouro,
-            'ENDERECO_COMPLEMENTO' => $request->complemento
+            'ENDERECO_CIDADE' => $request->city,
+            'ENDERECO_ESTADO' => $request->state,
+            'ENDERECO_NUMERO' => $request->number,
+            'ENDERECO_LOGRADOURO' => $request->address,
+            'ENDERECO_COMPLEMENTO' => $request->complement
         ]);
-        return response()->json(['message' => 'Endereço atualizado com sucesso'], 200);
+
+        return response()->json(['data' => 'Endereço atualizado com sucesso'], 200);
     }
 
 
     public function destroy($id){
         $endereco = Endereco::find($id);
-
+        
         if(JWTAuth::parseToken()->authenticate()->USUARIO_ID != $endereco->USUARIO_ID){
-            return response()->json(['message' => 'Usuário não autorizado'], 401);
+            return response()->json(['data' => 'Usuário não autorizado', 'error' => true], 401);
         }
 
-        $endereco->delete();
-        return response()->json(['message' => 'Endereço deletado com sucesso'], 200);
+        Endereco::where('ENDERECO_ID', '=',$id)->update([
+           "ENDERECO_APAGADO" => 1
+        ]);
+
+        return response()->json(['data' => 'Endereço deletado com sucesso', 'error' => false], 200);
     }
 
 }

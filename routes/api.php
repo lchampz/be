@@ -29,6 +29,9 @@ Route::middleware(["user"])->group(function () {
     Route::post("/usuario", [UsuarioController::class, "update"]);
 
     Route::get("/endereco", [EnderecoController::class, "show"]);
+    Route::post("/endereco", [EnderecoController::class, "store"]);
+    Route::post("/endereco/update", [EnderecoController::class, "update"]);
+    Route::delete("/endereco/{id}", [EnderecoController::class, "destroy"]);
 
     Route::get("/pedidos", [UsuarioController::class, "orders"]);
 
